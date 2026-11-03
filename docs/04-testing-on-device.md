@@ -29,6 +29,19 @@ Everything on the phone is tuned through `Documents/env.txt`
 
 The game's log is `Documents/log.txt` in the same folder (also visible over USB/iloader's file browser).
 
+## What to expect on screen
+
+The game profile's own measurements:
+
+- **iPhone (A20 Pro, docked)**: 60 fps with about **6 ms of GPU time per frame**, **2.4 GB footprint
+  with 3.7 GB of headroom**, no audio underruns.
+- **Mac**: 60 fps (p50 16.7 ms), ~2.4 GB resident and ~1.26 GB of Metal allocations in a race, flat
+  over minutes.
+
+An iPhone 17e (A19, 8 GB) sits below those devices on GPU cores; the profile's numbers are the ceiling,
+not a promise. If it drops below 60 fps, use the launcher's **Dynamic resolution** and **Frame rate**
+rows before touching anything else.
+
 ## Memory
 
 The MK8DX profile documents **~2.4 GB resident and ~1.26 GB of Metal allocations in a race** on the

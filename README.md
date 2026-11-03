@@ -12,7 +12,7 @@ and **no keys are used on the phone** — `prod.keys` is only read on the Mac wh
 |---|---|
 | Game | Mario Kart 8 Deluxe, title ID `0100152000022000` |
 | Packed version | 4.0.1 (`v1507328`, the newest in the folder and a version the profile registers) |
-| Output | `MarioKart8Deluxe.ipa`, unsigned (signed at sideload time) |
+| Output | `MarioKart8Deluxe.ipa`, **10.6 GB**, unsigned (signed at sideload time) |
 | Engine | nxnative, upstream commit `ad7af9c` (vendored in [`nxnative/`](nxnative)) |
 | Verified device | iPhone 17e — A19, 8 GB RAM, 256 GB, iOS 26+ |
 | Runtime cost | profile: ~2.4 GB resident + ~1.3 GB Metal in a race |

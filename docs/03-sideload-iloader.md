@@ -35,8 +35,8 @@ iloader may ask about:
 - **Entitlements**: leave the memory entitlement unchecked on a free certificate; the app runs
   without it.
 
-The IPA is ~12 GB, so give the transfer time. Keep ~15 GB free on the phone: iOS extracts the archive
-on install.
+The IPA is **10.6 GB**, so give the transfer time. Keep ~15 GB free on the phone: iOS extracts the
+archive on install.
 
 ## 4. Trust the developer
 

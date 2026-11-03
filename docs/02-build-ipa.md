@@ -54,6 +54,23 @@ The script prints one line per stage with progress and ETA; the tools' own outpu
 | 7 | generate the Xcode project (`xcodegen`) and build the app |
 | 8 | pack the unsigned IPA (`pack_ipa.py`) |
 
+### Measured on this machine (MK8DX 4.0.1, Xcode 27.2, 12 workers)
+
+| Stage | Time | Output |
+|---|---|---|
+| 1 identify + `nx_extract` build | 0:01 | — |
+| 2 extract v1507328 | **0:12** | 6,602 files, 11.3 GB |
+| 3 extract DLC | 0:00 | 1 DLC (the 124 KB catalogue ticket) |
+| 4 rewrite | **0:04** | `main`, `subsdk0`, `sdk` |
+| 5 shader split | **1:12** | **29,651 shaders** |
+| 6 iOS shader libraries | **25:47** | 29,651 of 29,651, 0 from cache |
+| 7 Xcode app build | **0:16** | 259 files compiled |
+| 8 IPA pack | **4:00** | `MarioKart8Deluxe.ipa`, 10.6 GB |
+| **Total** | **31:36** | 104,938 archive entries |
+
+The iOS shader step dominates: it is ~30k `iphoneos` metallib compiles. It is cached — a repeat build
+reuses them.
+
 ## What to verify afterwards
 
 ```bash
@@ -74,6 +91,37 @@ unzip -l "$IPA" | awk '{print $4}' | cut -d/ -f1-3 | sort -u | head
 
 The IPA is **unsigned** (ad-hoc signed executable carrying the entitlements), with bundle ID
 `org.nxnative.0100152000022000`; the sideloader replaces the signature.
+
+### Verified output of this build
+
+| Property | Value |
+|---|---|
+| File | `~/projects/mk8d/MarioKart8Deluxe.ipa`, **10.6 GB** (11 GB on disk) |
+| Bundle (inside `Payload/`) | `DmIOS.app` (display name comes from Info.plist) |
+| `CFBundleIdentifier` | `org.nxnative.0100152000022000` |
+| `CFBundleDisplayName` | **Mario Kart 8 Deluxe** |
+| `CFBundleShortVersionString` | `4.0.1` |
+| `MinimumOSVersion` | `26.0` |
+| `GCSupportsControllerUserInteraction` | `true` |
+| `GCSupportedGameControllers` | `[{"ProfileName":"ExtendedGamepad"}]` |
+| Executable arch | `Mach-O 64-bit executable arm64` (44 MB) |
+| Entitlements (ad-hoc) | `com.apple.developer.kernel.increased-memory-limit = true` |
+| Contents | `Payload/DmIOS.app/{DmIOS, romfs.img, msl/, aoc/, dm/}` |
+
+### One build-time warning, and why it is acceptable
+
+```
+[RED] this IPA uses v1507328 (4.0.1), which game profile 0100152000022000 was not brought up on
+      (v1441792 4.0.0, v1507328 4.0.1): its settings, with this version's own shaders;
+      every module is a registered build
+```
+
+The game profile records its Mac bring-up from **4.0.0**. Because the folder has only the 4.0.1 update
+NSP (the profile's own note says a build from the *registered* profile needs **both** update NSPs), the
+script derived a profile for 4.0.1. That exact shape — 4.0.1, derived profile, Booster Course DLC — is
+the configuration the profile documents as tested (a full three-lap Grand Prix on an iPhone 15 Pro Max
+on iOS 27.0.1). Every module in this build is a registered build ID, so no rewrite fix is missing; only
+the combined shader tables are derived, from this version's own shaders.
 
 ## Rebuilds
 
