@@ -1,0 +1,42 @@
+# Never commit game content, keys, build output or signed apps.
+# nxnative/ is a source snapshot of the upstream project (github.com/seedds/nxnative).
+
+# ---- Game content (the reason this file exists) ----
+*.nsp
+*.xci
+*.nsz
+*.xcz
+*.ncz
+*.nup
+*.nca
+*.img
+extract/
+aoc/
+nsp/
+
+# ---- Decryption keys ----
+prod.keys
+title.keys
+*.keys
+keys/
+
+# ---- Build output ----
+build/
+patched_*/
+shader/
+logs/
+ipa/
+*.ipa
+*.metallib
+*.mtl4a
+*.app
+*.dSYM
+__pycache__/
+*.pyc
+
+# ---- Local Python environment ----
+.venv/
+venv/
+
+# ---- macOS ----
+.DS_Store
